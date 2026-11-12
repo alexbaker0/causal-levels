@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export type ThemeChoice = "auto" | "light" | "dark";
 export type Theme = "light" | "dark";
@@ -31,7 +31,8 @@ export function useTheme(): { theme: Theme; choice: ThemeChoice; setChoice: (c: 
 
   const theme: Theme = choice === "auto" ? (systemDark ? "dark" : "light") : choice;
 
-  useEffect(() => {
+  // layout effect: the attribute must be set before child effects read CSS variables for canvas drawing
+  useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
