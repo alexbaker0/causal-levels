@@ -22,6 +22,7 @@ import {
   setPartitions,
 } from "./partition";
 import {
+  blockSizesFor,
   cyclicPermutation,
   hoelExample,
   identicalRows,
@@ -193,6 +194,18 @@ describe("partition search", () => {
     const res = findBestPartition(T);
     expect(res.partition).toEqual([0, 0, 0, 0, 1, 1, 1, 2]);
     expect(res.ei).toBeGreaterThan(effectiveInformation(T));
+  });
+
+  it("the block grouping beats micro for every preset size", () => {
+    expect(blockSizesFor(8)).toEqual([4, 3, 1]);
+    for (let n = 4; n <= 12; n++) {
+      const sizes = blockSizesFor(n);
+      expect(sizes.reduce((a, b) => a + b, 0)).toBe(n);
+      const T = noisyBlockChain(sizes);
+      const blocks = sizes.flatMap((s, b) => new Array<number>(s).fill(b));
+      expect(causalEmergence(T, blocks)).toBeGreaterThan(0.02);
+      expect(findBestPartition(T).ei).toBeGreaterThanOrEqual(effectiveInformation(coarseGrain(T, blocks)) - 1e-9);
+    }
   });
 
   it("uses greedy merge above n = 10 and still finds the blocks", () => {

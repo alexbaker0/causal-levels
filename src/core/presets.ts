@@ -65,6 +65,17 @@ export function noisyBlockChain(blockSizes: readonly number[] = [4, 3, 1], leak 
   });
 }
 
+/**
+ * Unequal block sizes for an n-state noisy block chain (n >= 4): roughly
+ * half, three-eighths and the remainder, e.g. 8 -> [4, 3, 1].
+ */
+export function blockSizesFor(n: number): number[] {
+  const a = Math.ceil(n / 2);
+  const c = Math.max(1, Math.round(n / 8));
+  const b = n - a - c;
+  return b >= 1 ? [a, b, c] : [n - 1, 1];
+}
+
 /** Random row-stochastic matrix; `sparsity` is the chance an entry is zeroed. */
 export function randomMatrix(n: number, rand: () => number = Math.random, sparsity = 0.5): Matrix {
   return Array.from({ length: n }, () =>
