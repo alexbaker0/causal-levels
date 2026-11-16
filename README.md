@@ -12,6 +12,9 @@ React + Vite + TypeScript, tested with Vitest. No runtime dependencies beyond
 React: the heatmaps and graphs are SVG, the time series and phase plane are
 canvas.
 
+Live: https://alexbaker0.github.io/causal-levels/ (deployed to GitHub Pages by
+`.github/workflows/pages.yml` on every push to `main`).
+
 ## Run and test
 
 ```bash
